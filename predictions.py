@@ -25,7 +25,7 @@ def predict_caption(photo):
         idx_to_word = pickle.load(f)
 
     # Placeholder for the image captioning model
-    model = load_model("final_mod.h5")
+    model = load_model("model_img_caption.h5")
 
     for _ in range(max_len):
         sequence = [word_to_idx[w] for w in in_text.split() if w in word_to_idx]
