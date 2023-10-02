@@ -1,4 +1,15 @@
 h5py==3.5.0
-tensorflow
-streamlit
+keras==2.7.0
+Keras-Preprocessing==1.1.2
+opencv-python-headless==4.5.5.64
+tensorboard==2.7.0
+tensorboard-data-server==0.6.1
+tensorboard-plugin-wit==1.8.0
+tensorflow-datasets==4.5.2
+tensorflow-estimator==2.7.0
+tensorflow-gpu==2.7.0
+tensorflow-hub==0.12.0
+tensorflow-io-gcs-filesystem==0.22.0
+tensorflow-metadata==1.7.0
+streamlit==1.2.0
 
