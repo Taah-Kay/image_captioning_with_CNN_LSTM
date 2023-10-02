@@ -1,0 +1,4 @@
+h5py==3.5.0
+tensorflow
+streamlit
+
