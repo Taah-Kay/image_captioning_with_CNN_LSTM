@@ -17,11 +17,11 @@ def predict_caption(photo):
     max_len = 29
 
     # Load word_to_idx dictionary from file
-    with open("wordToIndex[1].pkl", "rb") as f:
+    with open("word_to_index.pickle", "rb") as f:
         word_to_idx = pickle.load(f)
 
     # Load idx_to_word dictionary from file
-    with open("indexToWord[1].pkl", "rb") as f:
+    with open("index_to_word.pickle", "rb") as f:
         idx_to_word = pickle.load(f)
 
     # Placeholder for the image captioning model
@@ -56,13 +56,13 @@ def check_file_size(file, size_limit):
 
 # Streamlit app
 def main():
-    st.title("Image Captioning App")
+    st.title("Image_captioning_with_CNN_LSTM")
 
-    st.markdown("## Upload a video file")
-    st.markdown("Limit: 2MB per file • MP4")
+    st.markdown("## Upload your video")
+    st.markdown("Limit:Your video should not exceed 2MB • MP4")
 
     # Upload video file
-    video_file = st.file_uploader("Drag and drop file here", type=["mp4"])
+    video_file = st.file_uploader("Drag and drop your video here", type=["mp4"])
     if video_file is not None:
         if not check_file_size(video_file, 2 * 1024 * 1024):  # 2MB limit
             st.error("File size exceeds the limit of 2MB.")
@@ -97,7 +97,7 @@ def main():
 
             # Display the frame and the predicted caption
             st.image(frame, use_column_width=True)
-            st.write(f"Caption for Frame {i+1}: {caption}")
+            st.write(f"Caption {i+1}: {caption}")
 
 # Run the Streamlit app
 if __name__ == "__main__":
