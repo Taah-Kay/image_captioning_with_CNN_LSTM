@@ -13,8 +13,10 @@ import keras.utils as image
 import pickle
 from keras.models import load_model
 st.set_page_config(page_title="Image Captioning")
-# Load the pre-trained ResNet-50 model
-resnet_model = ResNet50(weights="imagenet", include_top=False, pooling="avg")
+# Loading InceptionV3
+model = InceptionV3(weights='imagenet')
+# we do not need to classify the images here, we only need to extract an image vector for our images
+model_new = Model(model.input, model.layers[-2].output)  
 
 
 # loading index_to word, word to index and the model
@@ -28,10 +30,22 @@ with open('word_to_index.pickle', 'rb') as handle:
 model = load_model('model_img_caption.h5', compile = False)
 max_lenth = 38
 
-# Using InceptionV3
-model = InceptionV3(weights='imagenet')
-# we do not need to classify the images here, we only need to extract an image vector for our images
-model_new = Model(model.input, model.layers[-2].output)  
+
+
+#function for pre-processing the image
+def preprocess(image):
+    img = image
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+    return x
+
+#function for encoding the image
+def encode(image):
+    image = preprocess(image)
+    fea_vec = model_new.predict(image)
+    fea_vec = np.reshape(fea_vec, fea_vec.shape[1])
+    return fea_vec
 
 # Define the prediction function
 def predict_caption(photo):
@@ -83,35 +97,23 @@ def main():
         while success:
             frames.append(image)
             success, image = vidcap.read()
-#function for pre-processing the image
-def preprocess(image):
-    img = image
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    return x
+        for img in frames:
+          x=img
+          image = encode(img).reshape((1,2048))
+          plt.imshow(x)
+          frame = plt.show()
+          caption = predict_caption(image)
 
-#function for encoding the image
-def encode(image):
-    image = preprocess(image)
-    fea_vec = model_new.predict(image)
-    fea_vec = np.reshape(fea_vec, fea_vec.shape[1])
-    return fea_vec
+            # Display the frame and the predicted caption
+    st.image(frame, use_column_width=True)
+    st.write(f"Caption {i+1}: {caption}")      
+
 
 
 
 # Process each frame and predict captions
 
-for img in frames:
-    x=img
-    image = encode(img).reshape((1,2048))
-    plt.imshow(x)
-    frame = plt.show()
-    caption = predict_caption(image)
 
-            # Display the frame and the predicted caption
-    st.image(frame, use_column_width=True)
-    st.write(f"Caption {i+1}: {caption}")      
 
             
             
