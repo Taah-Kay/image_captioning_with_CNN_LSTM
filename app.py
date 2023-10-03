@@ -22,13 +22,7 @@ with open('word_to_index.pickle', 'rb') as handle:
  
  
 model = load_model('model_img_caption.h5', compile = False)
-ix = 1
-for w in vocab:
-    wordtoix[w] = ix
-    ixtoword[ix] = w
-    ix += 1
 
-vocab_size = len(ixtoword) + 1
 def predict_caption(photo):
     in_text = 'startseq'
     for i in range(max_length):
