@@ -12,40 +12,38 @@ st.set_page_config(page_title="Image Captioning")
 resnet_model = ResNet50(weights="imagenet", include_top=False, pooling="avg")
 
 # Define the prediction function
+# loading index_to word, word to index and the model
+with open('index_to_word.pickle', 'rb') as handle:
+  ixtoword = pickle.load(handle)
+
+with open('word_to_index.pickle', 'rb') as handle:
+  wordtoix = pickle.load(handle)
+ 
+ 
+model = load_model('model_img_caption.h5')
+ix = 1
+for w in vocab:
+    wordtoix[w] = ix
+    ixtoword[ix] = w
+    ix += 1
+
+vocab_size = len(ixtoword) + 1
 def predict_caption(photo):
-    in_text = "startseq"
-    max_len = 29
-
-    # Load word_to_idx dictionary from file
-    with open("word_to_index.pickle", "rb") as f:
-        word_to_idx = pickle.load(f)
-
-    # Load idx_to_word dictionary from file
-    with open("index_to_word.pickle", "rb") as f:
-        idx_to_word = pickle.load(f)
-
-    # Placeholder for the image captioning model
-    model = load_model("model_img_caption.h5")
-
-    for _ in range(max_len):
-        sequence = [word_to_idx[w] for w in in_text.split() if w in word_to_idx]
-        sequence = pad_sequences([sequence], maxlen=max_len, padding='post')
-
-        ypred = model.predict([photo, sequence])
-        ypred = ypred.argmax()
-        if ypred not in idx_to_word:
-            break
-        word = idx_to_word[ypred]
+    in_text = 'startseq'
+    for i in range(max_length):
+        sequence = [wordtoix[w] for w in in_text.split() if w in wordtoix]
+        sequence = pad_sequences([sequence], maxlen=max_length)
+        yhat = model.predict([photo,sequence], verbose=0)
+        yhat = np.argmax(yhat)
+        word = ixtoword[yhat]
         in_text += ' ' + word
-
         if word == 'endseq':
             break
 
-    final_caption = in_text.split()
-    final_caption = final_caption[1:-1]
-    final_caption = ' '.join(final_caption)
-
-    return final_caption
+    final = in_text.split()
+    final = final[1:-1]
+    final = ' '.join(final)
+    return final
 
 # Function to check file size
 def check_file_size(file, size_limit):
@@ -64,7 +62,7 @@ def main():
     # Upload video file
     video_file = st.file_uploader("Drag and drop your video here", type=["mp4"])
     if video_file is not None:
-        if not check_file_size(video_file, 2 * 1024 * 1024):  # 2MB limit
+        if not check_file_size(video_file, 2 * 1024 ):  # 2MB limit
             st.error("File size exceeds the limit of 2MB.")
             return
 
