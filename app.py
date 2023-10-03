@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import tempfile
 import keras.utils as image
 import pickle
+from skimage.transform import resize
 from keras.models import load_model
 from  keras.preprocessing.image import image
 st.set_page_config(page_title="Image Captioning")
@@ -36,7 +37,7 @@ max_length = 38
 
 #function for pre-processing the image
 def preprocess(photo):
-    img = image.load_img(photo, target_size=(299, 299))
+    img = resize(photo, (299, 299))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
