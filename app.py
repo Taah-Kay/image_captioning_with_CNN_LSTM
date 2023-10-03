@@ -13,7 +13,7 @@ import tempfile
 import keras.utils as image
 import pickle
 from keras.models import load_model
-from keras.preprocessing import image
+from  keras.preprocessing.image import image
 st.set_page_config(page_title="Image Captioning")
 # Loading InceptionV3
 model = InceptionV3(weights='imagenet')
