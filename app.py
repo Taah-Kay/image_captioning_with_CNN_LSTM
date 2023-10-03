@@ -5,7 +5,11 @@ from PIL import Image
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
+from keras.applications.inception_v3 import InceptionV3
+from keras.applications.inception_v3 import preprocess_input
+from keras.models import Model
 import tempfile
+import keras.utils as image
 import pickle
 from keras.models import load_model
 st.set_page_config(page_title="Image Captioning")
@@ -23,6 +27,12 @@ with open('word_to_index.pickle', 'rb') as handle:
  
 model = load_model('model_img_caption.h5', compile = False)
 max_lenth = 38
+
+# Using InceptionV3
+model = InceptionV3(weights='imagenet')
+# we do not need to classify the images here, we only need to extract an image vector for our images
+model_new = Model(model.input, model.layers[-2].output)  
+
 # Define the prediction function
 def predict_caption(photo):
     in_text = 'startseq'
@@ -73,25 +83,38 @@ def main():
         while success:
             frames.append(image)
             success, image = vidcap.read()
+#function for pre-processing the image
+def preprocess(image):
+    img = image
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+    return x
 
-        # Process each frame and predict captions
-        st.write(f"Number of frames: {len(frames)}")
-        for i, frame in enumerate(frames):
-            # Resize the frame to the input size of the ResNet-50 model
-            frame = cv2.resize(frame, (224, 224))
+#function for encoding the image
+def encode(image):
+    image = preprocess(image)
+    fea_vec = model_new.predict(image)
+    fea_vec = np.reshape(fea_vec, fea_vec.shape[1])
+    return fea_vec
 
-            # Preprocess the image
-            img = preprocess_input(frame)
 
-            # Pass the image through the ResNet-50 model
-            img_features = resnet_model.predict(np.expand_dims(img, axis=0))
 
-            # Get the predicted caption
-            caption = predict_caption(img_features)
+# Process each frame and predict captions
+st.write(f"Number of frames: {len(frames)}")
+for img in frames:
+    x=img
+    image = encode(img).reshape((1,2048))
+    plt.imshow(x)
+    frame = plt.show()
+    caption = predict_caption(image)
 
             # Display the frame and the predicted caption
             st.image(frame, use_column_width=True)
-            st.write(f"Caption {i+1}: {caption}")
+            st.write(f"Caption {i+1}: {caption}")      
+
+            
+            
 
 # Run the Streamlit app
 if __name__ == "__main__":
