@@ -101,7 +101,7 @@ def encode(image):
 
 
 # Process each frame and predict captions
-st.write(f"Number of frames: {len(frames)}")
+
 for img in frames:
     x=img
     image = encode(img).reshape((1,2048))
