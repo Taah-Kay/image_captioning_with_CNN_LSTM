@@ -1,4 +1,4 @@
-skimage
+scikit-image
 h5py==3.5.0
 matplotlib
 keras==2.7.0
