@@ -28,7 +28,7 @@ with open('word_to_index.pickle', 'rb') as handle:
  
  
 model = load_model('model_img_caption.h5', compile = False)
-max_lenth = 38
+max_length = 38
 
 
 
@@ -105,8 +105,8 @@ def main():
           caption = predict_caption(image)
 
             # Display the frame and the predicted caption
-    st.image(frame, use_column_width=True)
-    st.write(f"Caption {i+1}: {caption}")      
+          st.image(frame, use_column_width=True)
+          st.write(f"Caption {i+1}: {caption}")      
 
 
 
