@@ -104,7 +104,7 @@ def main():
           x=img
           image = encode(img).reshape((1,2048))
           plt.imshow(x)
-          frame = plt.show()
+          frame = x
           caption = predict_caption(image)
 
             # Display the frame and the predicted caption
