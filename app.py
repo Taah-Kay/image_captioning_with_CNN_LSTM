@@ -36,7 +36,7 @@ max_length = 38
 
 #function for pre-processing the image
 def preprocess(photo):
-    img = photo
+    img = image.load_img(photo, target_size=(299, 299))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
