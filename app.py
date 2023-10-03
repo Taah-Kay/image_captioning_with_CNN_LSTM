@@ -109,7 +109,7 @@ def main():
 
             # Display the frame and the predicted caption
           st.image(frame, use_column_width=True)
-          st.write(f"Caption {i+1}: {caption}")      
+          st.write(f"Caption : {caption}")      
 
 
 
