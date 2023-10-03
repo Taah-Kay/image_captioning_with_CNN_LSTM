@@ -8,6 +8,7 @@ from tensorflow.keras.models import load_model
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from keras.models import Model
+import matplotlib.pyplot as plt
 import tempfile
 import keras.utils as image
 import pickle
