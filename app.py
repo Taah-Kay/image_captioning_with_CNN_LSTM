@@ -12,7 +12,7 @@ st.set_page_config(page_title="Image Captioning")
 # Load the pre-trained ResNet-50 model
 resnet_model = ResNet50(weights="imagenet", include_top=False, pooling="avg")
 
-# Define the prediction function
+
 # loading index_to word, word to index and the model
 with open('index_to_word.pickle', 'rb') as handle:
   ixtoword = pickle.load(handle)
@@ -22,7 +22,8 @@ with open('word_to_index.pickle', 'rb') as handle:
  
  
 model = load_model('model_img_caption.h5', compile = False)
-
+max_lenth = 38
+# Define the prediction function
 def predict_caption(photo):
     in_text = 'startseq'
     for i in range(max_length):
