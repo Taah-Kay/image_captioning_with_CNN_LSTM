@@ -57,7 +57,7 @@ def main():
     # Upload video file
     video_file = st.file_uploader("Drag and drop your video here", type=["mp4"])
     if video_file is not None:
-        if not check_file_size(video_file, 2 * 1024 ):  # 2MB limit
+        if not check_file_size(video_file, 2 * 1024 * 1024 ):  # 2MB limit
             st.error("File size exceeds the limit of 2MB.")
             return
 
