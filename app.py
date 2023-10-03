@@ -110,8 +110,8 @@ for img in frames:
     caption = predict_caption(image)
 
             # Display the frame and the predicted caption
-            st.image(frame, use_column_width=True)
-            st.write(f"Caption {i+1}: {caption}")      
+    st.image(frame, use_column_width=True)
+    st.write(f"Caption {i+1}: {caption}")      
 
             
             
