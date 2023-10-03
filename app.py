@@ -7,6 +7,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 import tempfile
 import pickle
+from keras.models import load_model
 st.set_page_config(page_title="Image Captioning")
 # Load the pre-trained ResNet-50 model
 resnet_model = ResNet50(weights="imagenet", include_top=False, pooling="avg")
