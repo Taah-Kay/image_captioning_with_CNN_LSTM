@@ -21,7 +21,7 @@ with open('word_to_index.pickle', 'rb') as handle:
   wordtoix = pickle.load(handle)
  
  
-model = load_model('model_img_caption.h5')
+model = load_model('model_img_caption.h5', compile = False)
 ix = 1
 for w in vocab:
     wordtoix[w] = ix
